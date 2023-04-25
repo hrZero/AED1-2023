@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <string.h>
+
+int identifyVowel (char letter);
+
+int main() {
+  int i=0, f, flag;
+  char str[50];
+  
+  scanf ("%s", str);
+  f = strlen(str) - 1;
+  flag = 1;
+  
+  while (i < f) {
+    if (identifyVowel(str[i]) && identifyVowel(str[f])) {
+      if (str[i] != str[f]) {
+        flag = 0;
+        break;
+      }
+    ++i;
+    --f;
+    }
+    else {
+      if (!identifyVowel(str[i])) ++i;
+      if (!identifyVowel(str[f])) --f;
+    }
+  }
+  printf ("%c\n", flag ? 'S' : 'N');
+
+  return 0;
+}
+
+int identifyVowel (char letter) {
+  switch (letter) {
+    case 'a':
+    case 'e':
+    case 'i':
+    case 'o':
+    case 'u':   return 1;
+    default:    return 0;
+  }
+}
