@@ -2,11 +2,11 @@
  
 int main() {
  
-    double radius, n=3.14159, area;
+    double radius, pi=3.14159, area;
     
-    scanf("%lf", &radius);
-    area= radius*radius*n;
-    printf("A=%.4lf\n", area);
+    scanf ("%lf", &radius);
+    area = radius * radius * pi;
+    printf ("A=%.4lf\n", area);
  
     return 0;
 }
