@@ -1,0 +1,272 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define true 1
+#define false 0
+#define MAX 1000
+typedef unsigned short us;
+
+//Structs for queues
+typedef struct typeNoQueue {
+  int data;
+  struct typeNoQueue *next;
+} typeNoQueue;
+
+typedef struct typeQueue {
+   typeNoQueue *first;
+   typeNoQueue *last;
+} typeQueue;
+
+//Structs for stacks
+typedef struct typeNoStack {
+   int data;
+   struct typeNoStack *next;
+} typeNoStack;
+
+typedef struct typeStack {
+   typeNoStack *top;
+} typeStack;
+
+//Structs for priority queues
+typedef struct pqueue {
+  int data;
+  int priority;
+} pqueue;
+
+typedef struct _pqueue {
+  int qtd;
+  struct pqueue datas[MAX];
+} _pqueue;
+
+//Functions for queues
+void queue(typeQueue *);
+void push(typeQueue *, int);
+int front(typeQueue *);
+void pop(typeQueue *);
+
+//Functions for stacks
+void stack(typeStack *);
+void pushStack(typeStack *, int);
+void popStack(typeStack *);
+int top(typeStack *);
+
+//Functions for priority queues
+_pqueue* priority();
+void pushPqueue(_pqueue *, int, int );
+void popPqueue(_pqueue *);
+int topPqueue(_pqueue *);
+void balanceRemove(_pqueue *, int);
+void balanceInsert(_pqueue *, int);
+
+
+int main() {
+  int n;
+  
+  while (scanf ("%d", &n) != EOF) {
+    int x, comando, i;
+    _Bool queueN, stackN, pqueue;
+    _pqueue *priority_queue = priority();
+    typeQueue queueK;
+    typeStack stackK;
+
+    queue (&queueK);
+    stack (&stackK);
+
+    queueN = stackN = pqueue = true;
+    
+    for (i = 0; i < n; ++i) {
+      scanf ("%d %d", &comando, &x);
+      
+      if (comando == 1) {
+        pushPqueue (priority_queue, x, x);
+        pushStack (&stackK, x);
+        push (&queueK, x);
+      }
+      else {
+        if (top(&stackK) != x)
+          stackN = false;
+        else
+          popStack(&stackK);
+        if (front(&queueK) != x)
+          queueN = false;
+        else
+          pop(&queueK);
+        if (topPqueue(priority_queue) != x)
+          pqueue = false;
+        else
+          popPqueue(priority_queue);
+      }
+    }
+    
+    if (!stackN && !queueN && !pqueue)
+      printf("impossible\n");
+    else if (stackN && pqueue)
+      printf("not sure\n");
+    else if (stackN && queueN)
+      printf("not sure\n");
+    else if (pqueue && queueN)
+      printf("not sure\n");
+    else if (pqueue)
+      printf("priority queue\n");
+    else if (queueN)
+      printf("queue\n");
+    else if (stackN)
+      printf("stack\n");
+  }
+  
+  return 0;
+}
+
+void queue (typeQueue *queue) {
+   queue->first = queue->last = NULL;
+}
+
+void push (typeQueue *queue, int x) {
+  typeNoQueue *aux;
+
+  aux = (typeNoQueue *) malloc(sizeof(typeNoQueue));
+  
+  if (!aux)
+    exit(1);
+  
+  if (queue->first) {
+    queue->last->next = aux;
+    aux->next = NULL;
+  }
+  else
+    queue->first = aux;
+  
+  queue->last = aux;
+  aux->data = x;
+}
+
+void pop (typeQueue *queue) {
+  typeNoQueue *aux;
+
+  if (queue->first) {
+    if (queue->first->next) {
+      aux = queue->first;
+      queue->first = queue->first->next;
+      free (aux);
+      return;
+    }
+    else {
+      aux = queue->first;
+      queue->first = queue->last = NULL;
+      free (aux);
+      return;
+    }
+  }
+  else
+    return;
+}
+
+int front (typeQueue *queue) {
+  return queue->first->data;
+}
+
+void stack (typeStack *stack) {
+  stack->top = NULL;
+}
+
+int top (typeStack *stack) {
+  return stack->top->data;
+}
+
+void popStack (typeStack *stack) {
+  typeNoStack *aux;
+
+  aux = stack->top;
+  if (aux) {
+    stack->top = aux->next;
+    free (aux);
+  }
+}
+
+void pushStack (typeStack *stack, int x) {
+  typeNoStack *aux;
+
+  aux = (typeNoStack *) malloc(sizeof(typeNoStack));
+  if (!aux)
+    exit(1);
+  
+  aux->next = stack->top;
+  stack->top = aux;
+  aux->data = x;
+}
+
+void pushPqueue (_pqueue *queueP, int priority, int id) {
+  if (queueP == NULL)
+    exit(1);
+  if (queueP->qtd == MAX)
+    exit(1);
+
+  queueP->datas[queueP->qtd].data = id;
+  queueP->datas[queueP->qtd].priority = priority;
+  balanceInsert(queueP, queueP->qtd);
+  ++queueP->qtd;
+}
+
+void balanceInsert (_pqueue *queueP, int son) {
+  int father = (son - 1) / 2;
+  pqueue tmp;
+  
+  while ((son > 0) && (queueP->datas[father].priority <= queueP->datas[son].priority)) {
+    tmp = queueP->datas[son];
+    queueP->datas[son] = queueP->datas[father];
+    queueP->datas[father] = tmp;
+    son = father;
+    father = (father - 1) / 2;
+  }
+}
+
+int topPqueue (_pqueue *queueP) {
+  if (queueP == NULL || queueP->qtd == 0)
+    return 0;
+  
+  return queueP->datas[0].data;
+}
+
+_pqueue* priority() {
+  _pqueue *queueP;
+
+  queueP = (_pqueue *) malloc(sizeof(_pqueue));
+  if (queueP)
+    queueP->qtd = 0;
+  
+  return queueP;
+}
+
+void popPqueue (_pqueue *queueP) {
+
+    if (queueP == NULL)
+        exit(1);
+
+    if (queueP->qtd == 0)
+        exit(1);
+
+    --queueP->qtd;
+    queueP->datas[0] = queueP->datas[queueP->qtd];
+    balanceRemove(queueP, 0);
+}
+
+void balanceRemove(_pqueue *queueP, int father) {
+  int son = 2*father + 1;
+  pqueue tmp;
+  
+  while (son < queueP->qtd) {
+    if (son < queueP->qtd - 1) {
+      if (queueP->datas[son].priority < queueP->datas[son+1].priority)
+        ++son;
+    }
+
+    if (queueP->datas[father].priority >= queueP->datas[son].priority)
+      break;
+
+    tmp = queueP->datas[father];
+    queueP->datas[father] = queueP->datas[son];
+    queueP->datas[son] = tmp;
+    father = son;
+    son = 2 * father + 1;
+  }
+}
