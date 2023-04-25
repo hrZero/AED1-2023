@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    int n, m;
+    char str[100];
+    
+    do {
+        scanf ("%d %d", &n, &m);
+        if (m == 0 && n == 0)
+          break;
+        sprintf (str, "%d", m+n);
+        
+        for (int i = 0; i < strlen(str); i++) {
+          if (str[i] != 48)
+            printf ("%c", str[i]);
+        }
+        printf ("\n");
+    } while (m >= 1 || n >= 1 || m <= 999999999 || n <= 999999999);
+    
+    return 0;
+}
