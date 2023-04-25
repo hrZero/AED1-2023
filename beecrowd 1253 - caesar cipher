@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <string.h>
+
+void caesarCipher (int n, char str[]);
+
+int main() {
+  int n;
+  char str[50];
+    
+  scanf ("%d", &n);
+  caesarCipher (n, str);
+    
+  return 0;
+}
+
+void caesarCipher (int n, char str[]) {
+  int pos;
+  char s[50];
+    
+  for (int i = 0; i < n; i++) {
+    scanf ("%s[^\n]", s);
+    scanf ("%d", &pos);
+  
+    for (int j = 0; j < strlen(s); j++) {
+      if (s[j]-pos < 65)
+        s[j] += 26 - pos;
+      else
+        s[j] -= pos;
+      
+      str[j] = s[j];
+      printf ("%c", str[j]);
+    }
+    printf ("\n");
+  }
+}
