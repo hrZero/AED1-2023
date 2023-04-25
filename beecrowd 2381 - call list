@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <string.h>
+
+//Struct for the names
+typedef struct {
+	char name[21];
+} List;
+
+//Function to sort the names by alphabetical order
+void abcSort (List *, int len);
+
+int main() {
+	int n, k;
+  List students[100];
+
+	scanf ("%d %d", &n, &k);
+
+	for (int i = 0; i < n; i++)
+		scanf ("%s", students[i].name);
+
+	abcSort (students, n);
+	printf ("%s\n", students[k-1].name);
+
+  return 0;
+}
+
+void abcSort (List *students, int len) {
+	int i = 1, j;
+	List tmp;
+
+	while (i < len)	{
+		j = i - 1;
+		tmp = students[i];
+
+		while (j >= 0 && strcmp (students[j].name, tmp.name) > 0)	{
+  		students[j+1] = students[j];
+			j--;
+		}
+    
+		students[j+1] = tmp;
+		i++;
+	}
+}
