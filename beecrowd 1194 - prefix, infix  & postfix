@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 1000
+
+typedef struct TreeNode {
+	char letter;
+	struct TreeNode *right;
+	struct TreeNode *left;
+} TreeNode;
+
+TreeNode* NewNode (char letter);
+void ShowPosfix (TreeNode *tree);
+int Src (char *str, int begin, int end, char letter);
+TreeNode* Tree (char *infix, char *prefix, int inBegin, int inEnd);
+
+short k;
+
+int main() {
+	short casesQtt;
+	short nodesQtt, i;
+	char prefix[MAX], infix[MAX];
+
+	scanf("%hu", &casesQtt);
+
+	while (casesQtt--) {
+		scanf ("%hu %s %s%*c", &nodesQtt, prefix, infix);
+		k = 0;
+		TreeNode *root = Tree (infix, prefix, 0, nodesQtt-1);
+		ShowPosfix (root);
+		printf ("\n");
+	}
+}
+
+TreeNode* NewNode (char letter) {
+	TreeNode *node = (TreeNode *) malloc (sizeof(TreeNode));
+	node->letter = letter;
+	node->left = node->right = NULL;
+
+	return node;
+}
+
+int Src (char *str, int begin, int end, char letter) {
+	short i;
+  
+	for (i = begin; i <= end; ++i) {
+		if (str[i] == letter)
+			return i;
+  }
+
+	return -1;
+}
+
+TreeNode* Tree (char *infix, char *prefix, int inBegin, int inEnd) {
+	int infix_k;
+
+	if (inBegin > inEnd)
+		return NULL;
+
+	TreeNode *node = NewNode (prefix[k++]);
+	if (inBegin == inEnd)
+		return node;
+
+	infix_k = Src (infix, inBegin, inEnd, node->letter);
+	node->left = Tree (infix, prefix, inBegin, infix_k-1);
+	node->right = Tree (infix, prefix, infix_k+1, inEnd);
+
+	return node;
+}
+
+void ShowPosfix (TreeNode *node) {
+	if (!node)
+		return;
+
+	ShowPosfix (node->left);
+	ShowPosfix (node->right);
+	printf ("%c", node->letter);
+}
