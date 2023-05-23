@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+bool VerifyName (char *name);
+
+int main() {
+	char name[100001];
+	int i, j, counter = 0;
+
+	scanf ("%s", name);
+
+	if (!VerifyName (name))
+		printf ("Quiet Link\n");
+	else
+		printf ("Angry Link\n");
+  
+  return 0;
+}
+
+bool VerifyName (char *name) {
+	unsigned counter = 0, i, j;
+	char comp[6] = "zelda";
+
+	for (i = 0, j = 0; name[i]; i++) {
+		if (name[i] == comp[j] || name[i] == comp[j]+32 || name[i] == comp[j]-32) {
+			j++;
+			counter++;
+			if (counter == 5)
+				return true;
+		}
+		else {
+			counter = 0;
+			j = 0;
+		}
+	}
+	return false;
+}
