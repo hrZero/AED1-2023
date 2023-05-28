@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+  int lenght, height, area, x = 0, k = 0, l = 0, M, G;
+  char **map;
+  
+  scanf ("%d %d", &lenght, &height);
+  
+  map = malloc (height * sizeof(char*));
+  for (int j = 0; j < height; j++)
+    map[j] = malloc ((lenght+1) * sizeof(char));
+
+  for (int i = 0; i < height; i++)
+    scanf ("%s", map[i]);
+  
+  area = lenght * height;
+  
+  for (M = 1; M <= area;) {
+    if (map[k][l] == '>') {
+      l++; M++; G = 1;
+      if(l >= lenght)
+        break;
+    }
+    else if(map[k][l] == 'v') {
+      k++; M++; G = 2;
+      if (k >= height)
+        break;
+    }
+    else if (map[k][l] == '<') {
+      l--; M++; G = 3;
+      if (l < 0)
+        break;
+    }
+    else if (map[k][l] == '^') {
+      k--; M++; G = 4;
+      if(k < 0)
+        break;
+    }
+    else if (map[k][l] == '*') {
+      M = 1000;
+      break;
+    }
+      
+    else if (map[k][l] == '.') {
+      if(G == 1) {
+        l++; M++;
+        if (l >= lenght)
+          break;
+      }
+      else if (G == 2) {
+        k++; M++;
+        if (k >= height)
+          break;
+      }
+      else if (G == 3) {
+        l--; M++;
+        if (l < 0)
+          break;
+      }
+      else if (G == 4) {
+        k--; M++;
+        if (k < 0)
+          break;
+      }
+    }
+  }
+  
+  if (M == 1000)
+    printf("*\n");
+  else
+    printf("!\n");
+
+  return 0;
+}
