@@ -11,10 +11,9 @@ unsigned graph[MAX][MAX];
 void Dijkstra (int, int, unsigned g[MAX][MAX], unsigned*);
 
 int main() {
-  int r, e, c;
-  int n, m, u, v;
+  int r, e, c, n, m, u, v;
 
-  while (scanf ("%d %d", &n, &m)) {
+  while (scanf ("%d %d", &n, &m) != EOF) {
     for (int i = 0; i <= n; i++) {
       for (int j = 0; j <= n; j++)
         graph[i][j] = INF;
