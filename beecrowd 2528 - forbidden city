@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+#define INF 0x3f3f3f3fU
+#define MAX 1200
+
+unsigned distance[MAX];
+unsigned graph[MAX][MAX];
+
+void Dijkstra (int, int, unsigned g[MAX][MAX], unsigned*);
+
+int main() {
+  int r, e, c;
+  int n, m, u, v;
+
+  while (scanf ("%d %d", &n, &m)) {
+    for (int i = 0; i <= n; i++) {
+      for (int j = 0; j <= n; j++)
+        graph[i][j] = INF;
+    }
+
+    for (int i = 0; i < m; i++) {
+      scanf ("%d %d", &u, &v);
+      graph[u][v] = graph[v][u] = 1;
+    }
+    
+    scanf ("%d %d %d", &c, &r, &e);
+    
+    for (int i = 0; i <= n; i++)
+      graph[e][i] = graph[i][e] = INF;
+
+    Dijkstra (c, n, graph, distance);    
+    printf ("%d\n", distance[r]);
+  }
+  
+  return 0;
+}
+
+void Dijkstra (int s, int n, unsigned g[MAX][MAX], unsigned *d) {
+    bool vis[n+1];
+    memset (vis, false, sizeof(vis));
+
+    for (int i = 0 ; i <= n; i++)
+      d[i] = INF;
+
+    d[s] = 0;
+
+    for (int i = 0; i <= n; i++) {
+      int v = -1;
+      
+      for (int j = 0; j <= n; j++) {
+        if (!vis[j] && (v == -1 || d[j] < d[v]))
+          v = j;
+      }
+
+    if (d[v] == INF)
+      break;
+
+    vis[v] = true;
+    
+    for (int j = 0; j <= n; j++) {
+      if (d[v] + g[v][j] < d[j])
+        d[j] = g[v][j] + d[v];
+    }
+  }
+}
