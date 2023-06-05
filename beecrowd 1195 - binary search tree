@@ -1,0 +1,106 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+typedef struct no {
+  int num;
+  struct no *esq;
+  struct no *dir;
+} NoArv;
+
+
+NoArv* AcharPai (NoArv *raiz, int n);
+int flag;
+
+
+int main() {
+  NoArv* raiz;
+  NoArv* parent;
+  NoArv* aux;
+  int tam, qtd_casos, c, d, valor;
+
+    raiz = NULL;
+    scanf("%d", &qtd_casos);
+
+    for (c = 1; c <= qtd_casos; c++) {
+        raiz = NULL;
+
+        scanf("%d", &tam);
+        for (d = 0; d < tam; d++) {
+            scanf("%d", &valor);
+
+            aux = (NoArv*) malloc (sizeof(NoArv));
+            aux->num = valor;
+            aux->esq = NULL;
+            aux->dir = NULL;
+
+            parent = AcharPai (raiz, valor);
+            if (parent == NULL)
+                raiz = aux;
+            else if (valor <= parent->num)
+                parent->esq = aux;
+            else
+                parent->dir = aux;
+        }
+
+        printf("Case %d:", c);
+
+        printf("\nPre.:");
+        flag = 1;
+        ImprimirArv (raiz);
+
+        printf("\nIn..:");
+        flag = 2;
+        ImprimirArv (raiz);
+
+        printf("\nPost:");
+        flag = 3;
+        ImprimirArv (raiz);
+
+        printf ("\n\n");
+    }
+
+    return 0;
+}
+
+
+NoArv* AcharPai (NoArv *raiz, int n) {
+    if (!raiz)
+      return NULL;
+    else if (n <= raiz->num) {
+      if (!raiz->esq)
+        return raiz;
+      else
+        return AcharPai (raiz->esq, n);
+    }
+    else {
+        if (!raiz->dir)
+          return raiz;
+        else
+          return AcharPai (raiz->dir, n);
+    }
+}
+
+
+int ImprimirArv (NoArv *raiz) {
+  if (raiz != NULL) {
+    if (flag == 1) {
+      printf(" %d", raiz->num);
+      ImprimirArv (raiz->esq);
+      ImprimirArv (raiz->dir);
+    }
+    if (flag == 2) {
+      ImprimirArv (raiz->esq);
+      printf(" %d", raiz->num);
+      ImprimirArv (raiz->dir);
+    }
+    if (flag == 3) {
+      ImprimirArv (raiz->esq);
+      ImprimirArv (raiz->dir);
+      printf(" %d", raiz->num);
+      }
+    }
+
+  return 0;
+}
