@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node {
+  int value;
+  struct node *next;
+} TableNode;
+
+typedef struct {
+  TableNode *first;
+  TableNode *last;
+} ListNode;
+
+
+void CreateTable (ListNode*, int);
+void Insert (ListNode*, int, int);
+void Print (TableNode*, int);
+
+
+int main() {
+	ListNode arr[100];
+	int test_qtt, key, key_qtt, num;
+	
+	scanf ("%d", &test_qtt);
+	
+	for (int i = 0; i < test_qtt; i++) {	
+		scanf ("%d %d", &key, &key_qtt);
+		CreateTable (arr, key);
+		
+		for (int j = 0; j < key_qtt; j++) {
+			scanf ("%d", &num);
+			Insert (arr, num % key, num);
+		}
+    
+		for (int j = 0; j < key; j++)
+			Print (arr[j].first, j);
+    
+		if (i+1 < test_qtt)
+			printf ("\n");
+	}
+  
+	return 0;
+}
+
+
+void CreateTable (ListNode *arr, int n) {
+	for (int i = 0; i < n; i++) {
+		arr[i].first = NULL;
+		arr[i].last = NULL;
+	}
+}
+
+void Insert (ListNode *arr, int pos, int n) {
+	TableNode *aux;
+
+  aux = (TableNode *) malloc (sizeof(TableNode));
+	aux->value = n;
+	aux->next = NULL;
+  
+	if(!arr[pos].first)
+		arr[pos].first = aux;
+  else
+    arr[pos].last->next = aux;
+	
+  arr[pos].last = aux;
+}
+
+void Print (TableNode *first, int pos) {
+	TableNode *aux;
+
+  aux = first;
+  
+	printf ("%d -> ", pos);
+	while (aux) {
+		printf("%d -> ", aux->value);
+		aux = aux->next;
+	}
+  
+	printf("\\");
+	printf("\n");
+}
