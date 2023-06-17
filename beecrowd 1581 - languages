@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <string.h>
+
+int main () {
+	int cases_qtt, n, eng;
+	char current[21], previous[21];
+
+	scanf ("%d", &cases_qtt);
+
+	while (cases_qtt--)	{
+		scanf ("%d", &n);
+		scanf (" %s", current);
+		n--;
+		eng = 0;
+		strcpy (previous, current);
+    
+		while (n--)	{
+			if (strcmp(current, previous) != 0 && eng ==0)
+				eng = 1;
+			else
+				strcpy (previous, current);
+			scanf (" %s", current);
+		}
+		if (eng == 1)
+			printf ("eng\n");
+		else
+			printf ("%s\n", current);
+		eng = 0;
+	}
+
+  return 0;
+}
