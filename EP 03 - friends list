@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <string.h>
+
+
+typedef struct {
+  char list[1000];
+} Old_list;
+
+typedef struct {
+  char list[1000];
+} New_list;
+
+typedef struct {
+  char list[1000];
+} Indication_list;
+
+
+int main() {
+  Old_list friends1;
+  New_list friends2;
+  Indication_list new_friend;
+  int flag, len, k = 0;
+
+  fgets (friends1.list, 1000, stdin);
+  fgets (friends2.list, 1000, stdin);
+  scanf ("%s", new_friend.list);
+
+  flag = strcmp (new_friend.list, "nao");
+  len = strlen(friends1.list);
+
+  if (flag == 0) {
+    if (friends1.list[len-1] == '\n')
+      friends1.list[--len] = ' ';
+    strcat (friends1.list, friends2.list);
+    printf ("%s", friends1.list);
+  }
+  else {
+    for (int i = 0; i < len; i++) {
+      if (friends1.list[i] == new_friend.list[k]) {
+        for (int j = i; j < len; j++) {
+          new_friend.list[k] = friends1.list[j];
+          friends1.list[j] = 0;
+          k++;
+        }
+      }
+    }
+    strcat (friends1.list, friends2.list);
+    strcat (friends1.list, new_friend.list);
+    printf ("%s\n", friends1.list);
+  }
+  
+  return 0;
+}
