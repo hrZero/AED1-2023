@@ -1,0 +1,110 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
+
+
+typedef struct {
+	char words[201];
+} string;
+
+
+bool CheckString (char *, string *, unsigned);
+void QuickSort (string *dictionary, int begin, int end);
+void Loop (string *dictionary, int len);
+
+
+int main() {
+	unsigned i, j, k = 0;
+	char beginFlag[201], endFlag[201];
+	string dictionary[5050];
+
+	memset (dictionary, 0, sizeof(dictionary));
+  
+	while (scanf(" %[^\n]", beginFlag) != EOF) {
+		i = j = 0;
+		while (beginFlag[i]) {
+			while (isalpha(beginFlag[i]))
+				endFlag[j++] = tolower(beginFlag[i++]);
+      
+			if (beginFlag[i] == '\0') {
+				endFlag[j] = '\0';
+				if (!CheckString (endFlag, dictionary, k))
+					strcpy(dictionary[k++].words, endFlag);
+        
+				j = 0;
+				memset(endFlag, 0, sizeof(endFlag));
+        
+				break;
+			}
+			endFlag[j] = '\0';
+      
+			while (!isalpha (beginFlag[i])) {
+				i++;
+				if (beginFlag[i] == '\0')
+					break;
+			}
+			if (!CheckString  (endFlag, dictionary, k))
+				strcpy(dictionary[k++].words, endFlag);
+
+			j = 0;
+			memset (endFlag, 0, sizeof(endFlag));
+		}
+		memset (beginFlag, 0, sizeof(beginFlag));
+	}
+
+	Loop  (dictionary, k);
+	j = 0;
+	if (strcmp(dictionary[0].words,"\0") == 0)
+		j = 1;
+
+	for (; j < k; j++)
+		printf ("%s\n", dictionary[j].words);
+
+  return 0;
+}
+
+
+bool CheckString  (char *str, string *dictionary, unsigned len) {
+  for (int i = 0; i < len; i++) {
+		if (strcmp(dictionary[i].words, str) == 0)
+			return true;
+  }
+
+	return false;
+}
+
+void QuickSort  (string *dictionary, int begin, int end) {
+	string pivot;
+	string temp;
+	int i, j;
+
+	if (end - begin > 0)	{
+		if (begin < end) {
+			i = begin;
+			j = end;
+			pivot = dictionary[(i + j) / 2];
+
+			do {
+				while (strcmp(dictionary[i].words, pivot.words) < 0)
+					i++;
+				while (strcmp(dictionary[j].words, pivot.words) > 0)
+					j--;
+
+				if (i <= j)	{
+					temp = dictionary[i];
+					dictionary[i] = dictionary[j];
+					dictionary[j] = temp;
+					i++; j--;
+				}
+			} while (i <= j);
+
+			QuickSort  (dictionary, begin, j);
+			QuickSort  (dictionary, i, end);
+		}
+	}
+}
+
+void Loop  (string *dictionary, int len) {
+	QuickSort  (dictionary, 0, len-1);
+}
